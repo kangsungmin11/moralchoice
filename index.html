@@ -1,0 +1,1625 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>공정한 판단 토의 수업: 마을 희망 지원금 100만 원 나누기</title>
+
+  <!-- Pretendard & Noto Sans KR Web Fonts for Crisp Korean Classroom Legibility -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Pretendard Variable"', 'Pretendard', '"Noto Sans KR"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+          },
+          boxShadow: {
+            'card': '0 4px 16px -4px rgba(15, 23, 42, 0.06), 0 2px 6px -2px rgba(15, 23, 42, 0.04)',
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    /* =========================================================
+       Base Reset & Warm Pastel Educational Palette
+       ========================================================= */
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background-color: #F6F7FB;
+      color: #1E293B;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Desktop & Landscape Tablet (>= 850px): Strictly 100vh 3-Tier Vertical Flexbox, Zero Scroll */
+    @media (min-width: 850px) {
+      html, body {
+        width: 100vw;
+        height: 100vh;
+        height: 100dvh;
+        overflow: hidden;
+      }
+
+      #appShell {
+        width: 100vw;
+        height: 100vh;
+        height: 100dvh;
+        display: flex;
+        flex-direction: column;
+        gap: clamp(6px, 1vh, 12px);
+        padding: clamp(6px, 1vh, 12px) clamp(10px, 1.2vw, 18px);
+        overflow: hidden;
+      }
+
+      #characterGrid {
+        flex: 1 1 0%;
+        min-height: 0;
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: clamp(8px, 0.9vw, 14px);
+      }
+
+      .char-card {
+        height: 100%;
+        min-height: 0;
+        overflow: hidden;
+      }
+    }
+
+    /* Narrow Mobile & Portrait Screens (< 850px): Smooth Responsive Vertical Scrolling */
+    @media (max-width: 849px) {
+      html, body {
+        min-height: 100vh;
+        overflow-x: hidden;
+        overflow-y: auto;
+      }
+
+      #appShell {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        padding: 10px;
+      }
+
+      #characterGrid {
+        display: grid;
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .reason-textarea {
+        min-height: 82px;
+      }
+    }
+
+    /* Fluid Portrait & Typography Scaling to Guarantee Zero Clipping */
+    .avatar-box {
+      width: clamp(48px, 6.8vh, 72px);
+      height: clamp(48px, 6.8vh, 72px);
+    }
+
+    .info-text {
+      font-size: clamp(11px, 1.48vh, 13.5px);
+      line-height: 1.38;
+    }
+
+    .reason-text {
+      font-size: clamp(11.5px, 1.5vh, 13.5px);
+      line-height: 1.44;
+    }
+
+    /* Custom Range Slider Styled per Character Theme Color */
+    input[type="range"].money-slider {
+      -webkit-appearance: none;
+      appearance: none;
+      height: 8px;
+      border-radius: 9999px;
+      outline: none;
+      transition: background 0.12s ease;
+    }
+
+    input[type="range"].money-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 19px;
+      height: 19px;
+      border-radius: 50%;
+      background: #FFFFFF;
+      border: 3px solid var(--slider-accent, #3B82F6);
+      box-shadow: 0 2px 5px rgba(15, 23, 42, 0.22);
+      cursor: pointer;
+      transition: transform 0.12s ease;
+    }
+
+    input[type="range"].money-slider::-webkit-slider-thumb:hover,
+    input[type="range"].money-slider::-webkit-slider-thumb:active {
+      transform: scale(1.15);
+    }
+
+    input[type="range"].money-slider::-moz-range-thumb {
+      width: 19px;
+      height: 19px;
+      border-radius: 50%;
+      background: #FFFFFF;
+      border: 3px solid var(--slider-accent, #3B82F6);
+      box-shadow: 0 2px 5px rgba(15, 23, 42, 0.22);
+      cursor: pointer;
+    }
+
+    /* Clean Numeric Inputs */
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    input[type="number"] {
+      -moz-appearance: textfield;
+    }
+
+    /* Floating Toast Notification Animation */
+    @keyframes toastIn {
+      from { opacity: 0; transform: translate(-50%, 14px); }
+      to { opacity: 1; transform: translate(-50%, 0); }
+    }
+    .toast-animate {
+      animation: toastIn 0.22s ease-out forwards;
+    }
+
+    /* Hide Print-Only Elements on Screen */
+    .print-only {
+      display: none;
+    }
+
+    /* =========================================================
+       A4 LANDSCAPE 1-PAGE PRINT WORKSHEET STYLES
+       ========================================================= */
+    @media print {
+      @page {
+        size: A4 landscape;
+        margin: 8mm 10mm;
+      }
+
+      html, body {
+        width: 100% !important;
+        height: auto !important;
+        overflow: visible !important;
+        background: #FFFFFF !important;
+        color: #0F172A !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+
+      .no-print {
+        display: none !important;
+      }
+
+      .print-only {
+        display: block !important;
+      }
+
+      #appShell {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 8px !important;
+        width: 100% !important;
+        height: auto !important;
+        padding: 0 !important;
+        overflow: visible !important;
+      }
+
+      #characterGrid {
+        display: grid !important;
+        grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+        gap: 8px !important;
+        height: auto !important;
+      }
+
+      .char-card {
+        height: auto !important;
+        box-shadow: none !important;
+        border: 1.2px solid #CBD5E1 !important;
+        padding: 8px !important;
+        break-inside: avoid !important;
+      }
+
+      .avatar-box {
+        width: 52px !important;
+        height: 52px !important;
+      }
+
+      .info-text {
+        font-size: 9.5px !important;
+        line-height: 1.35 !important;
+      }
+
+      textarea,
+      input[type="text"],
+      input[type="number"],
+      input[type="range"] {
+        display: none !important;
+      }
+
+      .print-mirror {
+        display: block !important;
+        white-space: pre-wrap !important;
+        word-break: break-word !important;
+        min-height: 64px;
+        border: 1px solid #CBD5E1;
+        border-radius: 8px;
+        padding: 6px;
+        background: #F8FAFC !important;
+        font-size: 10px !important;
+        line-height: 1.4 !important;
+        color: #1E293B !important;
+      }
+
+      .print-mirror-inline {
+        display: inline-block !important;
+        font-weight: 700;
+        color: #0F172A;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- =========================================================
+       MAIN 3-TIER VERTICAL FLEXBOX SHELL (100vh, Zero Scroll)
+       ========================================================= -->
+  <div id="appShell">
+
+    <!-- =======================================================
+         TIER 1: COMPACT HEADER & LIVE 100만 원 BUDGET TRACKER
+         ======================================================= -->
+    <header class="bg-white rounded-2xl border border-slate-200/90 shadow-card px-3 sm:px-4 py-2 flex flex-col gap-1.5 shrink-0">
+      <!-- Top Control Bar -->
+      <div class="flex flex-wrap items-center justify-between gap-2">
+        <!-- Left: Activity Title & Dilemma Summary Badge -->
+        <div class="flex items-center gap-2 min-w-0">
+          <h1 class="text-sm sm:text-base xl:text-lg font-extrabold text-slate-900 tracking-tight whitespace-nowrap">
+            ⚖️ 마을 희망 지원금 100만 원 나누기
+          </h1>
+          <span class="hidden md:inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-indigo-50 text-indigo-700 border border-indigo-200/80 whitespace-nowrap">
+            총 필요액 165만 원 vs 지원금 100만 원
+          </span>
+        </div>
+
+        <!-- Center: Real-Time Budget Metrics & Status Pill -->
+        <div class="flex items-center gap-2 sm:gap-2.5 bg-slate-50 border border-slate-200/80 rounded-xl px-2.5 sm:px-3 py-1">
+          <div class="hidden xl:flex items-baseline gap-1 text-xs whitespace-nowrap">
+            <span class="text-slate-500 font-semibold">총 지원금:</span>
+            <span class="font-extrabold text-slate-800">100만 원</span>
+          </div>
+          <span class="hidden xl:inline text-slate-300">|</span>
+          <div class="flex items-baseline gap-1 text-xs sm:text-sm whitespace-nowrap">
+            <span class="text-slate-500 font-semibold">배분 완료:</span>
+            <span id="trackerAllocated" class="font-extrabold text-blue-600 text-sm sm:text-base">0만 원</span>
+          </div>
+          <span class="text-slate-300">|</span>
+          <div class="flex items-baseline gap-1 text-xs sm:text-sm whitespace-nowrap">
+            <span id="trackerRemainLabel" class="text-slate-500 font-semibold">남은 돈:</span>
+            <span id="trackerRemain" class="font-extrabold text-amber-600 text-sm sm:text-base">100만 원</span>
+          </div>
+          <span id="trackerStatusBadge" class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-extrabold bg-amber-100 text-amber-800 border border-amber-200 whitespace-nowrap">
+            배분 중
+          </span>
+        </div>
+
+        <!-- Right: Classroom Utility Buttons -->
+        <div class="no-print flex flex-wrap items-center gap-1 sm:gap-1.5">
+          <button type="button" id="btnEqualSplit" class="px-2 sm:px-2.5 py-1.5 rounded-xl text-[11px] sm:text-xs font-bold bg-sky-50 hover:bg-sky-100 text-sky-800 border border-sky-200/80 transition active:scale-95 cursor-pointer whitespace-nowrap" title="네 분에게 25만 원씩 똑같이 나누어 보기">
+            ⚖️ 25만씩
+          </button>
+          <button type="button" id="btnReset" class="px-2 sm:px-2.5 py-1.5 rounded-xl text-[11px] sm:text-xs font-bold bg-white hover:bg-rose-50 hover:text-rose-600 text-slate-600 border border-slate-200 transition active:scale-95 cursor-pointer whitespace-nowrap" title="모든 배분 금액과 내용 초기화">
+            ↺ 초기화
+          </button>
+          <button type="button" id="btnScenario" class="px-2 sm:px-2.5 py-1.5 rounded-xl text-[11px] sm:text-xs font-bold bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 text-slate-700 transition active:scale-95 cursor-pointer whitespace-nowrap" title="수업 상황 안내 보기">
+            📖 상황
+          </button>
+          <button type="button" id="btnDiscussion" class="px-2 sm:px-2.5 py-1.5 rounded-xl text-[11px] sm:text-xs font-bold bg-slate-100 hover:bg-amber-50 hover:text-amber-800 text-slate-700 transition active:scale-95 cursor-pointer whitespace-nowrap" title="모둠 심화 토의 질문 보기">
+            💬 토의 질문
+          </button>
+          <button type="button" id="btnPresentation" class="px-2.5 sm:px-3 py-1.5 rounded-xl text-[11px] sm:text-xs font-extrabold bg-indigo-600 hover:bg-indigo-700 text-white shadow-xs transition active:scale-95 cursor-pointer whitespace-nowrap" title="교실 화면용 발표 모드 열기">
+            📊 발표
+          </button>
+          <button type="button" id="btnPrint" class="px-2.5 sm:px-3 py-1.5 rounded-xl text-[11px] sm:text-xs font-extrabold bg-slate-800 hover:bg-slate-900 text-white shadow-xs transition active:scale-95 cursor-pointer whitespace-nowrap" title="A4 가로 1장 활동지 인쇄 / PDF 저장">
+            🖨️ 인쇄
+          </button>
+        </div>
+
+        <!-- Print-Only Student / Group Header Info -->
+        <div class="print-only text-xs font-bold text-slate-700">
+          모둠/이름: <span id="printHeaderGroup" class="print-mirror-inline underline underline-offset-2">(미입력)</span>
+        </div>
+      </div>
+
+      <!-- Real-Time 4-Color Stacked Horizontal Progress Bar -->
+      <div class="flex items-center gap-2.5">
+        <div
+          id="stackedBarTrack"
+          class="flex-1 h-3.5 bg-slate-100 rounded-full overflow-hidden flex border border-slate-200/90 transition-all"
+          role="progressbar"
+          aria-label="100만 원 4색 누적 배분 막대그래프"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          aria-valuenow="0"
+        >
+          <div id="bar-minjun" class="h-full transition-all duration-200 flex items-center justify-center text-[10px] font-extrabold text-white overflow-hidden whitespace-nowrap" style="width:0%; background-color:#3B82F6;"></div>
+          <div id="bar-seoyeon" class="h-full transition-all duration-200 flex items-center justify-center text-[10px] font-extrabold text-white overflow-hidden whitespace-nowrap" style="width:0%; background-color:#10B981;"></div>
+          <div id="bar-doyun" class="h-full transition-all duration-200 flex items-center justify-center text-[10px] font-extrabold text-white overflow-hidden whitespace-nowrap" style="width:0%; background-color:#F59E0B;"></div>
+          <div id="bar-haneul" class="h-full transition-all duration-200 flex items-center justify-center text-[10px] font-extrabold text-white overflow-hidden whitespace-nowrap" style="width:0%; background-color:#F43F5E;"></div>
+        </div>
+        <div class="hidden md:flex items-center gap-2.5 text-[11px] font-semibold text-slate-600 shrink-0">
+          <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-[#3B82F6]"></span>강민준 <b id="leg-minjun">0만</b></span>
+          <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-[#10B981]"></span>김서연 <b id="leg-seoyeon">0만</b></span>
+          <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-[#F59E0B]"></span>박도윤 <b id="leg-doyun">0만</b></span>
+          <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-[#F43F5E]"></span>최하늘 <b id="leg-haneul">0만</b></span>
+        </div>
+      </div>
+    </header>
+
+    <!-- =======================================================
+         TIER 2: CENTER 4-COLUMN CHARACTER CARDS GRID (flex: 1)
+         ======================================================= -->
+    <main id="characterGrid" aria-label="4명의 이웃 사연 및 지원금 배분 카드">
+      <!-- Dynamically populated by JavaScript -->
+    </main>
+
+    <!-- =======================================================
+         TIER 3: COMPACT BOTTOM BAR (Fairness Criteria & Summary)
+         ======================================================= -->
+    <footer class="bg-white rounded-2xl border border-slate-200/90 shadow-card px-3 sm:px-4 py-2 flex flex-col lg:flex-row lg:items-center justify-between gap-2 shrink-0">
+      <!-- Left: Fairness Criteria Multi-Select Chips -->
+      <div class="flex flex-wrap items-center gap-1.5 min-w-0">
+        <span class="text-[11px] sm:text-xs font-extrabold text-slate-700 whitespace-nowrap mr-0.5">
+          공정함 기준:
+        </span>
+        <div id="criteriaChips" class="flex flex-wrap items-center gap-1" role="group" aria-label="공정함 기준 복수 선택">
+          <!-- Populated by JavaScript -->
+        </div>
+        <div id="printCriteriaSummary" class="print-only text-[10px] font-bold text-indigo-800 ml-1"></div>
+      </div>
+
+      <!-- Right: 1-Line Overall Allocation Principle & Group/Student Name -->
+      <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-1.5 lg:w-[44%] xl:w-[42%] shrink-0">
+        <div class="flex items-center gap-1.5 flex-1 min-w-0">
+          <label for="overallPrincipleInput" class="text-[11px] font-extrabold text-slate-600 whitespace-nowrap shrink-0">
+            전체 배분 원칙:
+          </label>
+          <input
+            type="text"
+            id="overallPrincipleInput"
+            placeholder="우리 모둠(나의) 공정한 배분 원칙을 한 줄로 요약해 보세요"
+            class="flex-1 min-w-0 px-2.5 py-1.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none text-xs font-medium text-slate-800 transition"
+          />
+          <span id="printOverallPrinciple" class="print-only text-[10px] font-semibold text-slate-800"></span>
+        </div>
+
+        <div class="no-print flex items-center sm:w-32 xl:w-36 shrink-0">
+          <label for="groupNameInput" class="sr-only">모둠 또는 이름</label>
+          <input
+            type="text"
+            id="groupNameInput"
+            placeholder="모둠 / 이름"
+            class="w-full px-2.5 py-1.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none text-xs font-semibold text-slate-800 transition"
+          />
+        </div>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- =========================================================
+       MODAL 1: SCENARIO GUIDE ("📖 수업 상황 안내")
+       ========================================================= -->
+  <div id="scenarioModal" class="no-print fixed inset-0 z-50 hidden bg-slate-900/65 backdrop-blur-xs flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="scenarioModalTitle">
+    <div class="bg-white rounded-3xl max-w-2xl w-full shadow-2xl border border-slate-200 overflow-hidden max-h-[90vh] flex flex-col">
+      <div class="bg-indigo-600 text-white px-6 py-4 flex items-center justify-between">
+        <h2 id="scenarioModalTitle" class="text-lg sm:text-xl font-extrabold flex items-center gap-2">
+          <span>📖</span> 수업 상황 안내: 마을 희망 지원금 100만 원
+        </h2>
+        <button type="button" data-close-modal="scenarioModal" class="px-3 py-1 rounded-xl bg-white/15 hover:bg-white/25 text-white text-xs font-bold cursor-pointer transition">닫기 ✕</button>
+      </div>
+      <div class="p-6 overflow-y-auto space-y-5">
+        <div class="bg-indigo-50/80 border border-indigo-100 rounded-2xl p-4 text-sm sm:text-[15px] text-slate-700 leading-relaxed">
+          우리 마을에 이웃을 돕기 위한 <strong>‘마을 희망 지원금 100만 원’</strong>이 마련되었습니다.<br />
+          도움을 신청한 네 분의 사연은 모두 소중하지만, 네 분이 필요한 금액을 모두 합치면 <strong class="text-rose-600">총 165만 원</strong>이라 <strong class="text-indigo-700">100만 원</strong>으로는 모두의 필요를 다 채워줄 수 없습니다.<br /><br />
+          여러분이 <strong>공정한 심사위원</strong>이 되어 100만 원을 네 분에게 나누어 주고, 왜 그렇게 배분했는지 이유를 적어 보세요!
+        </div>
+
+        <!-- Comparison Table -->
+        <div>
+          <h3 class="text-xs font-extrabold text-slate-500 uppercase tracking-wider mb-2">네 분의 신청 사연과 필요 금액 한눈에 보기 (총 165만 원)</h3>
+          <div class="overflow-hidden rounded-2xl border border-slate-200">
+            <table class="w-full text-left border-collapse text-xs sm:text-sm">
+              <thead class="bg-slate-50 text-slate-600 font-bold border-b border-slate-200">
+                <tr>
+                  <th class="py-2.5 px-3">신청자</th>
+                  <th class="py-2.5 px-3">유형 / 기준</th>
+                  <th class="py-2.5 px-3">필요한 이유</th>
+                  <th class="py-2.5 px-3 text-right">필요 금액</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100 text-slate-700">
+                <tr>
+                  <td class="py-2.5 px-3 font-extrabold text-blue-600">① 강민준 (22세)</td>
+                  <td class="py-2.5 px-3">공부하는 청년 (노력·미래)</td>
+                  <td class="py-2.5 px-3">소방관 시험 준비 교재비·강의료</td>
+                  <td class="py-2.5 px-3 text-right font-extrabold text-blue-600">40만 원</td>
+                </tr>
+                <tr>
+                  <td class="py-2.5 px-3 font-extrabold text-emerald-600">② 김서연 (28세)</td>
+                  <td class="py-2.5 px-3">지체장애인 (배려·이동)</td>
+                  <td class="py-2.5 px-3">전동 휠체어 수리·집 앞 경사로 보수</td>
+                  <td class="py-2.5 px-3 text-right font-extrabold text-emerald-600">50만 원</td>
+                </tr>
+                <tr>
+                  <td class="py-2.5 px-3 font-extrabold text-amber-600">③ 박도윤 (39세)</td>
+                  <td class="py-2.5 px-3">긴급한 아빠 (긴급 필요)</td>
+                  <td class="py-2.5 px-3">갑자기 다친 아이의 이번 달 병원비·생활비</td>
+                  <td class="py-2.5 px-3 text-right font-extrabold text-amber-600">45만 원</td>
+                </tr>
+                <tr>
+                  <td class="py-2.5 px-3 font-extrabold text-rose-600">④ 최하늘 (68세)</td>
+                  <td class="py-2.5 px-3">공부방 할머니 (나눔·공익)</td>
+                  <td class="py-2.5 px-3">동네 무료 공부방 낡은 책상 교체·도서 구입</td>
+                  <td class="py-2.5 px-3 text-right font-extrabold text-rose-600">30만 원</td>
+                </tr>
+                <tr class="bg-slate-50 font-extrabold">
+                  <td colspan="3" class="py-2.5 px-3 text-slate-800">필요 금액 합계 (지원금 100만 원보다 65만 원 부족!)</td>
+                  <td class="py-2.5 px-3 text-right text-rose-600">165만 원</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       MODAL 2: DISCUSSION QUESTIONS ("💬 심화 토의 질문")
+       ========================================================= -->
+  <div id="discussionModal" class="no-print fixed inset-0 z-50 hidden bg-slate-900/65 backdrop-blur-xs flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="discussionModalTitle">
+    <div class="bg-white rounded-3xl max-w-2xl w-full shadow-2xl border border-slate-200 overflow-hidden max-h-[90vh] flex flex-col">
+      <div class="bg-amber-500 text-white px-6 py-4 flex items-center justify-between">
+        <h2 id="discussionModalTitle" class="text-lg sm:text-xl font-extrabold flex items-center gap-2">
+          <span>💬</span> 모둠 심화 토의 질문
+        </h2>
+        <button type="button" data-close-modal="discussionModal" class="px-3 py-1 rounded-xl bg-white/20 hover:bg-white/30 text-white text-xs font-bold cursor-pointer transition">닫기 ✕</button>
+      </div>
+      <div class="p-5 sm:p-6 overflow-y-auto space-y-3" id="discussionList">
+        <!-- Populated by JavaScript -->
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       MODAL 3: PRESENTATION MODE ("📊 교실 발표 화면")
+       ========================================================= -->
+  <div id="presentationModal" class="no-print fixed inset-0 z-50 hidden bg-slate-900/75 backdrop-blur-sm flex items-center justify-center p-3 sm:p-5" role="dialog" aria-modal="true" aria-labelledby="presentationModalTitle">
+    <div class="bg-white rounded-3xl max-w-6xl w-full shadow-2xl border border-slate-200 overflow-hidden max-h-[94vh] flex flex-col">
+      <!-- Top Bar -->
+      <div class="bg-slate-900 text-white px-5 sm:px-7 py-3.5 flex flex-wrap items-center justify-between gap-2 shrink-0">
+        <div class="flex items-center gap-3">
+          <span class="px-2.5 py-0.5 rounded-full text-xs font-extrabold bg-indigo-500 text-white">교실 발표 화면</span>
+          <h2 id="presentationModalTitle" class="text-lg sm:text-xl font-extrabold">
+            우리 모둠의 100만 원 공정 배분 결과
+          </h2>
+          <span id="presGroupBadge" class="text-xs sm:text-sm font-bold text-amber-300"></span>
+        </div>
+        <div class="flex items-center gap-2">
+          <button type="button" id="modalPrintBtn" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-white/15 hover:bg-white/25 text-white cursor-pointer transition">🖨️ 인쇄</button>
+          <button type="button" data-close-modal="presentationModal" class="px-3.5 py-1.5 rounded-xl text-xs font-extrabold bg-white text-slate-900 hover:bg-slate-100 cursor-pointer transition">닫기 ✕</button>
+        </div>
+      </div>
+
+      <!-- Warning Banner if Total != 100 -->
+      <div id="presWarningBanner" class="hidden bg-rose-50 border-b border-rose-200 px-6 py-2.5 text-xs sm:text-sm font-bold text-rose-700 flex items-center gap-2 shrink-0">
+        <span>⚠️</span>
+        <span id="presWarningText"></span>
+      </div>
+
+      <!-- Presentation Split Body: Left Donut + Principles / Right 2x2 Cards -->
+      <div class="p-4 sm:p-6 overflow-y-auto grid grid-cols-1 lg:grid-cols-12 gap-5 bg-slate-50/70">
+        <!-- Left (5 cols): SVG Donut Chart + Fairness Criteria + Overall Principle -->
+        <div class="lg:col-span-5 flex flex-col gap-4">
+          <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-xs flex flex-col items-center">
+            <div class="relative w-48 h-48 sm:w-52 sm:h-52">
+              <svg viewBox="0 0 180 180" class="w-full h-full -rotate-90" aria-label="100만 원 배분 비율 도넛 차트">
+                <circle cx="90" cy="90" r="66" fill="none" stroke="#E2E8F0" stroke-width="26"></circle>
+                <g id="presDonutSegments"></g>
+              </svg>
+              <div class="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none">
+                <span class="text-xs font-bold text-slate-400">총 배분액</span>
+                <span id="presDonutTotal" class="text-3xl font-extrabold text-slate-900">0만</span>
+                <span class="text-[11px] font-semibold text-slate-400">/ 100만 원</span>
+              </div>
+            </div>
+
+            <!-- Donut Chart Legend -->
+            <div id="presLegend" class="w-full mt-4 space-y-2 text-xs sm:text-sm"></div>
+          </div>
+
+          <!-- Selected Fairness Criteria & Overall Principle -->
+          <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200 shadow-xs space-y-3 flex-1">
+            <div>
+              <div class="text-xs font-extrabold text-indigo-600 mb-1.5">⚖️ 우리가 선택한 공정함 기준</div>
+              <div id="presCriteriaTags" class="flex flex-wrap gap-1.5"></div>
+            </div>
+            <div class="pt-2 border-t border-slate-100">
+              <div class="text-xs font-extrabold text-slate-500 mb-1">📌 우리 모둠의 전체 배분 원칙</div>
+              <p id="presOverallPrinciple" class="text-sm sm:text-base font-bold text-slate-800 leading-relaxed"></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right (7 cols): 2x2 Large Character Result Grid -->
+        <div id="presCardsGrid" class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-3.5 content-start">
+          <!-- Populated by JavaScript -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       MODAL 4: CUSTOM RESET CONFIRMATION (Never uses confirm())
+       ========================================================= -->
+  <div id="resetConfirmModal" class="no-print fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="resetConfirmTitle">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-200 text-center">
+      <div class="w-12 h-12 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center text-2xl mx-auto mb-3">↺</div>
+      <h3 id="resetConfirmTitle" class="text-lg font-extrabold text-slate-900">모든 내용을 초기화할까요?</h3>
+      <p class="mt-2 text-xs sm:text-sm text-slate-500 leading-relaxed">
+        배분한 금액, 배분 이유, 공정함 기준과 전체 배분 원칙이 모두 처음 상태로 돌아갑니다.
+      </p>
+      <div class="mt-5 flex items-center gap-2.5">
+        <button type="button" data-close-modal="resetConfirmModal" class="flex-1 py-2.5 rounded-xl text-sm font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer transition">취소</button>
+        <button type="button" id="confirmResetBtn" class="flex-1 py-2.5 rounded-xl text-sm font-extrabold bg-rose-600 hover:bg-rose-700 text-white cursor-pointer transition">네, 초기화할게요</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Toast Container (Never uses alert()) -->
+  <div id="toastContainer" class="no-print fixed bottom-4 left-1/2 -translate-x-1/2 z-50 pointer-events-none"></div>
+
+  <!-- =========================================================
+       APPLICATION LOGIC (State, Vector Portraits, Persistence)
+       ========================================================= -->
+  <script>
+    (() => {
+      'use strict';
+
+      const STORAGE_KEY = 'fair_judgment_v3_diverse';
+      const TOTAL_BUDGET = 100; // 단위: 만 원
+
+      // Fairness Criteria Toggle Chips (Multi-Select)
+      const CRITERIA_OPTIONS = [
+        '⚖️ 모두 똑같이(평등)',
+        '🚨 가장 급한 필요',
+        '♿ 약자·장애 배려',
+        '📚 노력과 미래 투자',
+        '🤝 모두에게 이익'
+      ];
+
+      // 3 Deep Classroom Discussion Questions (Expandable Teacher Hints)
+      const DISCUSSION_QUESTIONS = [
+        {
+          id: 'dq1',
+          num: '질문 1',
+          tag: '평등(똑같이) vs 형평성(필요에 맞게)',
+          title: '25만 원씩 똑같이 나누면 왜 모두가 아쉬워할까?',
+          hint: '네 분에게 똑같이 25만 원씩 나누면 공평해 보이지만, 40만·50만·45만·30만 원이 필요한 네 분 모두 목표 금액을 단 한 명도 채우지 못합니다. 특히 당장 휠체어를 고쳐야 하는 김서연 씨나 아이 병원비가 급한 박도윤 씨는 큰 어려움을 겪게 됩니다. ‘숫자가 똑같은 것’과 ‘각자의 상황에 알맞게 돕는 것’ 중 무엇이 진짜 공정함일지 이야기해 보세요.'
+        },
+        {
+          id: 'dq2',
+          num: '질문 2',
+          tag: '긴급한 개인 구제 vs 다수의 공동 이익',
+          title: '‘가장 급한 사람’ vs ‘가장 많은 사람이 혜택받는 일’ 중 무엇이 더 공정할까?',
+          hint: '박도윤 씨(아이 병원비·생활비)나 김서연 씨(휠체어 수리)처럼 당장 한 사람의 삶이 위급한 상황을 먼저 돕는 것과, 최하늘 할머니의 동네 무료 공부방(30만 원)처럼 여러 아이들이 함께 오랫동안 혜택을 누리는 일에 지원하는 것 중 어떤 가치가 더 우선되어야 할지 비교해 봅시다.'
+        },
+        {
+          id: 'dq3',
+          num: '질문 3',
+          tag: '역지사지와 공정한 설득',
+          title: '내가 받지 못했거나 적게 받은 사람이라면 우리 모둠의 결정을 납득할 수 있을까?',
+          hint: '우리 모둠에서 가장 적은 금액을 받게 된 분의 입장이 되어 ‘왜 이 금액을 배분했나요?’에 적은 이유를 읽어 보세요. 상대방의 마음을 존중하면서도 “아, 그런 공정한 기준이라면 이해할 수 있어요.”라고 고개를 끄덕일 수 있는지 점검해 봅시다.'
+        }
+      ];
+
+      // =========================================================
+      // Warm Flat-Editorial Vector SVG Portraits (4 Distinct Neighbors)
+      // =========================================================
+      const SVG_PORTRAITS = {
+        // 1. 강민준 (22세 · 공부하는 청년): Neat glasses, yellow sweater/shirt, thick study book & pencil, sky blue circle
+        minjun: `
+          <svg viewBox="0 0 180 180" class="w-full h-full" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="강민준 청년 일러스트 - 안경을 쓰고 노란 스웨터를 입은 채 전공 책과 연필을 든 모습">
+            <circle cx="90" cy="90" r="80" fill="#DBEAFE" />
+            <!-- Subtle Study Sparkle -->
+            <circle cx="140" cy="48" r="3.5" fill="#60A5FA"/>
+            <path d="M40 54 L42 58 L46 60 L42 62 L40 66 L38 62 L34 60 L38 58 Z" fill="#93C5FD"/>
+            <!-- Cozy Yellow Sweater over White Collared Shirt -->
+            <path d="M40 166 C44 128 62 116 90 116 C118 116 136 128 140 166 Z" fill="#FACC15" stroke="#1E293B" stroke-width="2.4" stroke-linejoin="round"/>
+            <!-- White Shirt Collar -->
+            <path d="M75 115 L90 130 L105 115 L98 112 L90 122 L82 112 Z" fill="#FFFFFF" stroke="#1E293B" stroke-width="2" stroke-linejoin="round"/>
+            <!-- Neck -->
+            <path d="M81 97 L81 116 C81 120 99 120 99 116 L99 97 Z" fill="#F9C9A6" stroke="#1E293B" stroke-width="2.1"/>
+            <!-- Ears -->
+            <circle cx="63" cy="76" r="6.5" fill="#F9C9A6" stroke="#1E293B" stroke-width="2.1"/>
+            <circle cx="117" cy="76" r="6.5" fill="#F9C9A6" stroke="#1E293B" stroke-width="2.1"/>
+            <!-- Face -->
+            <rect x="64" y="43" width="52" height="58" rx="25" fill="#FDD8BE" stroke="#1E293B" stroke-width="2.4"/>
+            <!-- Neat Short Dark Hair -->
+            <path d="M60 72 C58 46 72 30 90 30 C110 30 122 46 120 72 C115 61 108 54 97 51 C91 58 80 58 64 68 Z" fill="#2A2321" stroke="#1E293B" stroke-width="2.3" stroke-linejoin="round"/>
+            <!-- Neat Round Glasses -->
+            <circle cx="78" cy="75" r="9.5" fill="#FFFFFF" fill-opacity="0.35" stroke="#1E293B" stroke-width="2.2"/>
+            <circle cx="102" cy="75" r="9.5" fill="#FFFFFF" fill-opacity="0.35" stroke="#1E293B" stroke-width="2.2"/>
+            <line x1="87.5" y1="75" x2="92.5" y2="75" stroke="#1E293B" stroke-width="2.2"/>
+            <!-- Sincere Eyes & Gentle Smile -->
+            <circle cx="78" cy="75" r="2.6" fill="#1E293B"/>
+            <circle cx="102" cy="75" r="2.6" fill="#1E293B"/>
+            <ellipse cx="72" cy="84" rx="4.2" ry="2.1" fill="#F4A28C" opacity="0.5"/>
+            <ellipse cx="108" cy="84" rx="4.2" ry="2.1" fill="#F4A28C" opacity="0.5"/>
+            <path d="M84 88 Q90 94 96 88" fill="none" stroke="#1E293B" stroke-width="2.1" stroke-linecap="round"/>
+            <!-- Thick Study Textbook Held in Front -->
+            <g transform="rotate(-7 82 150)">
+              <rect x="52" y="132" width="56" height="36" rx="5" fill="#2563EB" stroke="#1E293B" stroke-width="2.2"/>
+              <rect x="56" y="136" width="8" height="28" rx="2" fill="#1D4ED8"/>
+              <line x1="70" y1="144" x2="100" y2="144" stroke="#DBEAFE" stroke-width="2.5" stroke-linecap="round"/>
+              <line x1="70" y1="152" x2="94" y2="152" stroke="#93C5FD" stroke-width="2.2" stroke-linecap="round"/>
+              <!-- Red Bookmark Ribbon -->
+              <path d="M96 132 L96 144 L99 141 L102 144 L102 132 Z" fill="#F43F5E"/>
+            </g>
+            <!-- Pencil Held in Right Hand -->
+            <g transform="rotate(24 128 134)">
+              <rect x="125" y="112" width="6.5" height="34" rx="1.5" fill="#F59E0B" stroke="#1E293B" stroke-width="1.8"/>
+              <polygon points="125,112 131.5,112 128.25,103" fill="#FDE68A" stroke="#1E293B" stroke-width="1.6" stroke-linejoin="round"/>
+              <polygon points="127,106 129.5,106 128.25,103" fill="#1E293B"/>
+              <rect x="125" y="143" width="6.5" height="5" rx="1" fill="#FB7185" stroke="#1E293B" stroke-width="1.6"/>
+            </g>
+            <!-- Hands Holding Book & Pencil -->
+            <ellipse cx="66" cy="156" rx="8" ry="5.5" fill="#FDD8BE" stroke="#1E293B" stroke-width="2"/>
+            <circle cx="122" cy="144" r="7" fill="#FDD8BE" stroke="#1E293B" stroke-width="2"/>
+          </svg>
+        `,
+
+        // 2. 김서연 (28세 · 지체장애인 디자이너): Warm smiling Korean woman in dignified wheelchair, holding sketchbook, mint circle
+        seoyeon: `
+          <svg viewBox="0 0 180 180" class="w-full h-full" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="김서연 디자이너 일러스트 - 휠체어에 앉아 스케치북을 안고 환하게 웃는 모습">
+            <circle cx="90" cy="90" r="80" fill="#D1FAE5" />
+            <!-- Dignified Sleek Wheelchair Backrest & Push Handles -->
+            <path d="M52 84 L52 144 M128 84 L128 144" stroke="#334155" stroke-width="5" stroke-linecap="round"/>
+            <rect x="44" y="80" width="12" height="6" rx="3" fill="#1E293B"/>
+            <rect x="124" y="80" width="12" height="6" rx="3" fill="#1E293B"/>
+            <rect x="54" y="96" width="72" height="44" rx="8" fill="#475569" stroke="#1E293B" stroke-width="2.1"/>
+            <!-- Wheelchair Side Wheels with Mint/Emerald Spokes -->
+            <g fill="none">
+              <circle cx="43" cy="145" r="24" stroke="#059669" stroke-width="4.5"/>
+              <circle cx="43" cy="145" r="18" stroke="#6EE7B7" stroke-width="2"/>
+              <circle cx="43" cy="145" r="4" fill="#1E293B"/>
+              <path d="M43 127 L43 163 M25 145 L61 145 M31 133 L55 157 M55 133 L31 157" stroke="#64748B" stroke-width="1.5"/>
+
+              <circle cx="137" cy="145" r="24" stroke="#059669" stroke-width="4.5"/>
+              <circle cx="137" cy="145" r="18" stroke="#6EE7B7" stroke-width="2"/>
+              <circle cx="137" cy="145" r="4" fill="#1E293B"/>
+              <path d="M137 127 L137 163 M119 145 L155 145 M125 133 L149 157 M149 133 L125 157" stroke="#64748B" stroke-width="1.5"/>
+            </g>
+            <!-- Soft Shoulder-Length Dark Brown Hair (Back) -->
+            <path d="M58 68 C51 91 54 110 65 114 L115 114 C126 110 129 91 122 68 Z" fill="#3B2B26" stroke="#1E293B" stroke-width="2.2"/>
+            <!-- Emerald Cardigan & Cream Top -->
+            <path d="M52 156 C54 125 68 113 90 113 C112 113 126 125 128 156 Z" fill="#10B981" stroke="#1E293B" stroke-width="2.3" stroke-linejoin="round"/>
+            <path d="M77 114 L90 134 L103 114 Z" fill="#FFFBEB" stroke="#1E293B" stroke-width="1.9" stroke-linejoin="round"/>
+            <!-- Neck -->
+            <path d="M81 96 L81 114 C81 118 99 118 99 114 L99 96 Z" fill="#F9C9A6" stroke="#1E293B" stroke-width="2.1"/>
+            <!-- Ears -->
+            <circle cx="64" cy="76" r="6" fill="#F9C9A6" stroke="#1E293B" stroke-width="2"/>
+            <circle cx="116" cy="76" r="6" fill="#F9C9A6" stroke="#1E293B" stroke-width="2"/>
+            <!-- Face -->
+            <rect x="65" y="43" width="50" height="57" rx="25" fill="#FDD9C0" stroke="#1E293B" stroke-width="2.3"/>
+            <!-- Front Hair with Soft Side-Swept Bangs -->
+            <path d="M62 72 C61 47 74 34 90 34 C107 34 119 47 118 72 C112 60 104 54 93 51 C86 58 75 61 64 69 Z" fill="#3B2B26" stroke="#1E293B" stroke-width="2.2" stroke-linejoin="round"/>
+            <!-- Warm Bright Eyes & Smile -->
+            <circle cx="79" cy="74" r="2.6" fill="#1E293B"/>
+            <circle cx="101" cy="74" r="2.6" fill="#1E293B"/>
+            <ellipse cx="72" cy="82" rx="4.5" ry="2.2" fill="#F4A28C" opacity="0.55"/>
+            <ellipse cx="108" cy="82" rx="4.5" ry="2.2" fill="#F4A28C" opacity="0.55"/>
+            <path d="M83 87 Q90 94 97 87" fill="none" stroke="#1E293B" stroke-width="2.2" stroke-linecap="round"/>
+            <!-- Spiral Sketchbook Hugged in Front -->
+            <g transform="rotate(-4 90 148)">
+              <rect x="62" y="131" width="56" height="36" rx="4" fill="#FFFBEB" stroke="#1E293B" stroke-width="2.1"/>
+              <!-- Spiral Binding Rings -->
+              <g stroke="#475569" stroke-width="2" stroke-linecap="round">
+                <line x1="68" y1="128" x2="68" y2="134"/>
+                <line x1="77" y1="128" x2="77" y2="134"/>
+                <line x1="86" y1="128" x2="86" y2="134"/>
+                <line x1="95" y1="128" x2="95" y2="134"/>
+                <line x1="104" y1="128" x2="104" y2="134"/>
+                <line x1="112" y1="128" x2="112" y2="134"/>
+              </g>
+              <!-- Little Colorful Design Sketch Inside -->
+              <circle cx="80" cy="149" r="6" fill="#34D399" opacity="0.7"/>
+              <path d="M90 155 L98 142 L106 155 Z" fill="#FBBF24" opacity="0.8"/>
+            </g>
+            <!-- Hands Hugging Sketchbook -->
+            <ellipse cx="64" cy="148" rx="7" ry="5.5" fill="#FDD9C0" stroke="#1E293B" stroke-width="2"/>
+            <ellipse cx="116" cy="148" rx="7" ry="5.5" fill="#FDD9C0" stroke="#1E293B" stroke-width="2"/>
+          </svg>
+        `,
+
+        // 3. 박도윤 (39세 · 돈이 꼭 필요한 아빠): Kind Korean father in work shirt/apron with floating band-aid & heart, warm yellow circle
+        doyun: `
+          <svg viewBox="0 0 180 180" class="w-full h-full" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="박도윤 아빠 일러스트 - 작업복과 앞치마 차림 옆에 반창고와 하트가 떠 있는 다정한 모습">
+            <circle cx="90" cy="90" r="80" fill="#FEF3C7" />
+            <!-- Floating Small Band-Aid Icon (Left Top) -->
+            <g transform="translate(36, 52) rotate(-30)">
+              <rect x="-12" y="-5" width="24" height="10" rx="5" fill="#FDBA74" stroke="#9A3412" stroke-width="1.8"/>
+              <rect x="-4" y="-4.5" width="8" height="9" fill="#FFEDD5" stroke="#9A3412" stroke-width="1.2"/>
+              <circle cx="-8" cy="-1.5" r="0.9" fill="#9A3412"/>
+              <circle cx="-8" cy="1.5" r="0.9" fill="#9A3412"/>
+              <circle cx="8" cy="-1.5" r="0.9" fill="#9A3412"/>
+              <circle cx="8" cy="1.5" r="0.9" fill="#9A3412"/>
+            </g>
+            <!-- Floating Warm Heart Icon (Right Top) -->
+            <path d="M142 54 C142 49 135 47 132 51 C129 47 122 49 122 54 C122 61 132 67 132 67 C132 67 142 61 142 54 Z" fill="#FB7185" stroke="#BE123C" stroke-width="1.8" stroke-linejoin="round"/>
+            <!-- Work Shirt & Sturdy Work Apron -->
+            <path d="M38 166 C42 126 61 114 90 114 C119 114 138 126 142 166 Z" fill="#475569" stroke="#1E293B" stroke-width="2.4" stroke-linejoin="round"/>
+            <!-- Rolled/Layered Collar -->
+            <path d="M74 114 L90 128 L106 114" fill="#E2E8F0" stroke="#1E293B" stroke-width="2" stroke-linejoin="round"/>
+            <!-- Warm Brown-Amber Work Apron -->
+            <path d="M64 118 L64 166 L116 166 L116 118 L108 118 L108 132 L72 132 L72 118 Z" fill="#D97706" stroke="#1E293B" stroke-width="2.2" stroke-linejoin="round"/>
+            <!-- Front Apron Pocket -->
+            <rect x="75" y="144" width="30" height="16" rx="4" fill="#B45309" stroke="#1E293B" stroke-width="1.8"/>
+            <!-- Neck -->
+            <path d="M80 96 L80 116 C80 120 100 120 100 116 L100 96 Z" fill="#F6C19B" stroke="#1E293B" stroke-width="2.2"/>
+            <!-- Ears -->
+            <circle cx="62" cy="76" r="6.8" fill="#F6C19B" stroke="#1E293B" stroke-width="2.1"/>
+            <circle cx="118" cy="76" r="6.8" fill="#F6C19B" stroke="#1E293B" stroke-width="2.1"/>
+            <!-- Face (Warm, Earnest Fatherly Expression) -->
+            <rect x="63" y="42" width="54" height="59" rx="25" fill="#FCCFA9" stroke="#1E293B" stroke-width="2.4"/>
+            <!-- Neat Adult Short Hair -->
+            <path d="M59 71 C58 44 71 29 90 29 C110 29 123 44 121 71 C116 59 108 52 96 50 C88 56 76 57 63 67 Z" fill="#292524" stroke="#1E293B" stroke-width="2.3" stroke-linejoin="round"/>
+            <!-- Kind Slightly Concerned Yet Hopeful Eyes & Warm Smile -->
+            <path d="M72 65 Q78 62 84 65" fill="none" stroke="#292524" stroke-width="2.1" stroke-linecap="round"/>
+            <path d="M96 65 Q102 62 108 65" fill="none" stroke="#292524" stroke-width="2.1" stroke-linecap="round"/>
+            <circle cx="78" cy="75" r="2.7" fill="#1E293B"/>
+            <circle cx="102" cy="75" r="2.7" fill="#1E293B"/>
+            <ellipse cx="71" cy="83" rx="4.5" ry="2.2" fill="#EA8C77" opacity="0.45"/>
+            <ellipse cx="109" cy="83" rx="4.5" ry="2.2" fill="#EA8C77" opacity="0.45"/>
+            <path d="M83 89 Q90 94 97 89" fill="none" stroke="#1E293B" stroke-width="2.2" stroke-linecap="round"/>
+          </svg>
+        `,
+
+        // 4. 최하늘 (68세 · 동네 공부방 할머니): Silver hair in neat bun, round glasses, warm smile, storybook & cookies/heart, coral pink circle
+        haneul: `
+          <svg viewBox="0 0 180 180" class="w-full h-full" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="최하늘 할머니 일러스트 - 은발을 묶고 둥근 안경을 쓴 채 동화책과 쿠키를 든 인자한 모습">
+            <circle cx="90" cy="90" r="80" fill="#FFE4E6" />
+            <!-- Floating Little Heart -->
+            <path d="M144 52 C144 48 139 46 136 49 C133 46 128 48 128 52 C128 57 136 62 136 62 C136 62 144 57 144 52 Z" fill="#F43F5E" opacity="0.85"/>
+            <!-- Silver Hair Bun on Top -->
+            <circle cx="90" cy="30" r="15" fill="#CBD5E1" stroke="#475569" stroke-width="2.2"/>
+            <path d="M78 36 Q90 42 102 36" fill="none" stroke="#F43F5E" stroke-width="3" stroke-linecap="round"/>
+            <!-- Silver Hair Back/Sides -->
+            <path d="M58 68 C55 86 60 100 68 104 L112 104 C120 100 125 86 122 68 Z" fill="#CBD5E1" stroke="#475569" stroke-width="2.1"/>
+            <!-- Warm Coral Knit Cardigan & Cream Blouse -->
+            <path d="M40 166 C44 128 62 116 90 116 C118 116 136 128 140 166 Z" fill="#FB7185" stroke="#1E293B" stroke-width="2.4" stroke-linejoin="round"/>
+            <path d="M77 116 L90 135 L103 116 Z" fill="#FFFBEB" stroke="#1E293B" stroke-width="2" stroke-linejoin="round"/>
+            <!-- Neck -->
+            <path d="M81 97 L81 116 C81 120 99 120 99 116 L99 97 Z" fill="#F9C9A6" stroke="#1E293B" stroke-width="2"/>
+            <!-- Ears -->
+            <circle cx="64" cy="76" r="6" fill="#F9C9A6" stroke="#1E293B" stroke-width="2"/>
+            <circle cx="116" cy="76" r="6" fill="#F9C9A6" stroke="#1E293B" stroke-width="2"/>
+            <!-- Face -->
+            <rect x="65" y="44" width="50" height="57" rx="25" fill="#FDD8BE" stroke="#1E293B" stroke-width="2.3"/>
+            <!-- Neatly Parted Silver Hair Front -->
+            <path d="M62 72 C60 47 74 35 90 35 C106 35 120 47 118 72 C111 60 100 54 90 50 C80 54 69 60 62 72 Z" fill="#E2E8F0" stroke="#475569" stroke-width="2.2" stroke-linejoin="round"/>
+            <!-- Round Gold-Rim Glasses -->
+            <circle cx="79" cy="75" r="9.5" fill="#FFFFFF" fill-opacity="0.35" stroke="#B45309" stroke-width="2.1"/>
+            <circle cx="101" cy="75" r="9.5" fill="#FFFFFF" fill-opacity="0.35" stroke="#B45309" stroke-width="2.1"/>
+            <line x1="88.5" y1="75" x2="91.5" y2="75" stroke="#B45309" stroke-width="2"/>
+            <!-- Kind Smiling Crescent Eyes & Gentle Smile Lines -->
+            <path d="M75 75 Q79 71 83 75" fill="none" stroke="#1E293B" stroke-width="2.2" stroke-linecap="round"/>
+            <path d="M97 75 Q101 71 105 75" fill="none" stroke="#1E293B" stroke-width="2.2" stroke-linecap="round"/>
+            <ellipse cx="72" cy="83" rx="4.5" ry="2.2" fill="#FB7185" opacity="0.45"/>
+            <ellipse cx="108" cy="83" rx="4.5" ry="2.2" fill="#FB7185" opacity="0.45"/>
+            <path d="M83 88 Q90 95 97 88" fill="none" stroke="#1E293B" stroke-width="2.2" stroke-linecap="round"/>
+            <!-- Open Storybook Held on Left -->
+            <g transform="rotate(-6 70 150)">
+              <path d="M46 138 L70 142 L94 138 L92 164 L70 167 L48 164 Z" fill="#FFFBEB" stroke="#1E293B" stroke-width="2.1" stroke-linejoin="round"/>
+              <line x1="70" y1="142" x2="70" y2="167" stroke="#CBD5E1" stroke-width="2"/>
+              <line x1="53" y1="148" x2="65" y2="149" stroke="#F43F5E" stroke-width="2" stroke-linecap="round"/>
+              <line x1="53" y1="155" x2="65" y2="156" stroke="#94A3B8" stroke-width="2" stroke-linecap="round"/>
+              <circle cx="81" cy="152" r="4.5" fill="#FBBF24"/>
+            </g>
+            <!-- Warm Cookies on a Small Plate Held on Right -->
+            <ellipse cx="118" cy="157" rx="18" ry="8" fill="#FFFFFF" stroke="#1E293B" stroke-width="2"/>
+            <circle cx="112" cy="152" r="6.5" fill="#D97706" stroke="#78350F" stroke-width="1.6"/>
+            <circle cx="110" cy="150" r="1.2" fill="#451A03"/><circle cx="114" cy="153" r="1.2" fill="#451A03"/><circle cx="111" cy="155" r="1.1" fill="#451A03"/>
+            <circle cx="123" cy="153" r="6.5" fill="#F59E0B" stroke="#78350F" stroke-width="1.6"/>
+            <circle cx="121" cy="151" r="1.2" fill="#451A03"/><circle cx="125" cy="154" r="1.2" fill="#451A03"/><circle cx="122" cy="156" r="1.1" fill="#451A03"/>
+            <!-- Hands Holding Storybook & Cookie Plate -->
+            <ellipse cx="56" cy="161" rx="7" ry="5" fill="#FDD8BE" stroke="#1E293B" stroke-width="2"/>
+            <ellipse cx="116" cy="163" rx="7.5" ry="5" fill="#FDD8BE" stroke="#1E293B" stroke-width="2"/>
+          </svg>
+        `
+      };
+
+      // =========================================================
+      // 4 Diverse Neighbors Data (Total Needed = 165만 원 vs Budget 100만 원)
+      // =========================================================
+      const CHARACTERS = [
+        {
+          id: 'minjun',
+          num: '①',
+          name: '강민준',
+          ageRole: '22세 · 공부하는 청년',
+          themeBadge: '노력 · 미래 투자',
+          needed: 40,
+          colorHex: '#3B82F6',
+          softBg: '#EFF6FF',
+          borderHex: '#BFDBFE',
+          badgeClasses: 'bg-blue-100 text-blue-800 border-blue-200',
+          textAccent: 'text-blue-600',
+          proPoint: '소방관이 되기 위해 매일 도서관에서 성실히 공부하는 평범한 청년. 교재비와 강의료가 필요해요.',
+          dilemmaPoint: '당장 생계가 아주 급한 편은 아니며, 아르바이트로 시간을 더 들여 모을 수도 있어요.',
+          svg: SVG_PORTRAITS.minjun
+        },
+        {
+          id: 'seoyeon',
+          num: '②',
+          name: '김서연',
+          ageRole: '28세 · 지체장애인',
+          themeBadge: '배려 · 이동 권리',
+          needed: 50,
+          colorHex: '#10B981',
+          softBg: '#ECFDF5',
+          borderHex: '#A7F3D0',
+          badgeClasses: 'bg-emerald-100 text-emerald-800 border-emerald-200',
+          textAccent: 'text-emerald-600',
+          proPoint: '휠체어를 타고 출퇴근하는 디자이너. 고장 난 전동 휠체어 수리와 집 앞 경사로 보수가 꼭 필요해요.',
+          dilemmaPoint: '필요한 금액(50만 원)이 가장 커서, 다 지원하면 다른 분들의 몫이 크게 줄어들어요.',
+          svg: SVG_PORTRAITS.seoyeon
+        },
+        {
+          id: 'doyun',
+          num: '③',
+          name: '박도윤',
+          ageRole: '39세 · 돈이 꼭 필요한 아빠',
+          themeBadge: '긴급한 필요',
+          needed: 45,
+          colorHex: '#F59E0B',
+          softBg: '#FFFBEB',
+          borderHex: '#FDE68A',
+          badgeClasses: 'bg-amber-100 text-amber-800 border-amber-200',
+          textAccent: 'text-amber-600',
+          proPoint: '홀로 아이를 키우며 일하다가 아이가 갑자기 다쳐 당장 이번 달 병원비와 생활비가 매우 급해요.',
+          dilemmaPoint: '당장 급한 생활비로 쓰면 끝나는 돈이라, 장기적인 해결책은 아니라는 의견도 있어요.',
+          svg: SVG_PORTRAITS.doyun
+        },
+        {
+          id: 'haneul',
+          num: '④',
+          name: '최하늘',
+          ageRole: '68세 · 동네 공부방 할머니',
+          themeBadge: '나눔 · 모두의 이익',
+          needed: 30,
+          colorHex: '#F43F5E',
+          softBg: '#FFF1F2',
+          borderHex: '#FECDD3',
+          badgeClasses: 'bg-rose-100 text-rose-800 border-rose-200',
+          textAccent: 'text-rose-600',
+          proPoint: '10년째 동네 아이들에게 무료 공부방과 간식을 나눠요. 낡은 책상 교체와 아이들 책 구입이 필요해요.',
+          dilemmaPoint: '당장 개인의 생계가 위급하지는 않으며, 낡았지만 기존 책상으로도 조금 불편하게 운영은 가능해요.',
+          svg: SVG_PORTRAITS.haneul
+        }
+      ];
+
+      // Default Clean State
+      function createDefaultState() {
+        return {
+          groupName: '',
+          selectedCriteria: [],
+          overallPrinciple: '',
+          allocations: { minjun: 0, seoyeon: 0, doyun: 0, haneul: 0 },
+          reasons: { minjun: '', seoyeon: '', doyun: '', haneul: '' }
+        };
+      }
+
+      let state = createDefaultState();
+
+      // =========================================================
+      // LocalStorage Persistence (Safe in Sandboxed Environments)
+      // =========================================================
+      function loadState() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (raw) {
+            const parsed = JSON.parse(raw);
+            state = {
+              ...createDefaultState(),
+              ...parsed,
+              allocations: { ...createDefaultState().allocations, ...(parsed.allocations || {}) },
+              reasons: { ...createDefaultState().reasons, ...(parsed.reasons || {}) }
+            };
+          }
+        } catch (err) {
+          console.warn('저장된 데이터를 불러올 수 없습니다:', err);
+        }
+      }
+
+      function saveState() {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        } catch (err) {
+          // Graceful fallback if localStorage is blocked
+        }
+      }
+
+      // =========================================================
+      // Utility Helpers
+      // =========================================================
+      function escapeHtml(str) {
+        return String(str || '')
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+
+      function showToast(message, type = 'info') {
+        const container = document.getElementById('toastContainer');
+        if (!container) return;
+        const styles = {
+          info: 'bg-slate-800 text-white',
+          success: 'bg-emerald-600 text-white',
+          warning: 'bg-amber-600 text-white',
+          error: 'bg-rose-600 text-white'
+        };
+        const el = document.createElement('div');
+        el.className = `toast-animate pointer-events-auto px-4 py-2 rounded-2xl shadow-lg text-xs sm:text-sm font-bold whitespace-nowrap ${styles[type] || styles.info}`;
+        el.textContent = message;
+        container.innerHTML = '';
+        container.appendChild(el);
+        setTimeout(() => {
+          el.style.opacity = '0';
+          el.style.transition = 'opacity 0.25s ease';
+          setTimeout(() => el.remove(), 260);
+        }, 2500);
+      }
+
+      function getTotalAllocated() {
+        return CHARACTERS.reduce((sum, c) => sum + (Number(state.allocations[c.id]) || 0), 0);
+      }
+
+      // =========================================================
+      // Render Tier 2: 4-Column Character Cards Grid
+      // =========================================================
+      function renderCharacterCards() {
+        const grid = document.getElementById('characterGrid');
+        grid.innerHTML = CHARACTERS.map((c) => {
+          const amt = Number(state.allocations[c.id]) || 0;
+          const reason = state.reasons[c.id] || '';
+          return `
+            <article
+              class="char-card bg-white rounded-2xl shadow-card border flex flex-col p-2.5 xl:p-3 gap-2 transition hover:shadow-md"
+              style="border-color: ${c.borderHex};"
+            >
+              <!-- 1. Character Portrait + Name/Age/Role + Theme Badge & Needed Pill -->
+              <div class="flex items-center gap-2.5 shrink-0">
+                <div class="avatar-box shrink-0 rounded-2xl overflow-hidden flex items-center justify-center p-0.5" style="background-color: ${c.softBg};">
+                  ${c.svg}
+                </div>
+                <div class="min-w-0 flex-1">
+                  <div class="flex items-center justify-between gap-1">
+                    <h2 class="text-sm sm:text-base xl:text-lg font-extrabold text-slate-900 truncate leading-tight">
+                      <span class="${c.textAccent}">${c.num}</span> ${c.name}
+                    </h2>
+                    <span class="px-1.5 py-0.5 rounded-lg text-[10px] xl:text-[11px] font-extrabold shrink-0 border ${c.badgeClasses}">
+                      필요 ${c.needed}만
+                    </span>
+                  </div>
+                  <p class="text-[11px] font-semibold text-slate-500 truncate mt-0.5">${c.ageRole}</p>
+                  <div class="mt-1">
+                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] xl:text-[11px] font-extrabold border ${c.badgeClasses}">
+                      ${c.themeBadge}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 2. Concise Pros (👍) & Dilemma (🤔) Box -->
+              <div class="rounded-xl p-2 xl:p-2.5 space-y-1.5 shrink-0 border border-slate-100 bg-slate-50/90 info-text">
+                <div class="flex items-start gap-1.5">
+                  <span class="shrink-0 text-xs leading-snug" aria-label="상황과 장점">👍</span>
+                  <p class="text-slate-700 font-medium">${c.proPoint}</p>
+                </div>
+                <div class="flex items-start gap-1.5 pt-1 border-t border-slate-200/70">
+                  <span class="shrink-0 text-xs leading-snug" aria-label="고민할 점">🤔</span>
+                  <p class="text-slate-600">${c.dilemmaPoint}</p>
+                </div>
+              </div>
+
+              <!-- 3. Money Allocation Controls + Fulfillment Rate -->
+              <div class="rounded-xl p-2 xl:p-2.5 shrink-0 border" style="background-color: ${c.softBg}; border-color: ${c.borderHex};">
+                <!-- Current Amount & Live Needed Fulfillment Pill -->
+                <div class="flex items-center justify-between gap-1 mb-1.5">
+                  <div class="flex items-baseline gap-1">
+                    <span class="text-[11px] font-bold text-slate-500">배분</span>
+                    <span id="disp-${c.id}" class="text-base xl:text-lg font-extrabold ${c.textAccent}">${amt}만 원</span>
+                  </div>
+                  <span id="fulfill-${c.id}" class="px-2 py-0.5 rounded-full text-[10px] xl:text-[11px] font-extrabold bg-white/90 border border-slate-200/80 text-slate-600 whitespace-nowrap">
+                    필요액의 0%
+                  </span>
+                </div>
+
+                <!-- Synced Range Slider -->
+                <div class="no-print mb-2">
+                  <input
+                    type="range"
+                    id="slider-${c.id}"
+                    data-id="${c.id}"
+                    min="0"
+                    max="100"
+                    step="1"
+                    value="${amt}"
+                    aria-label="${c.name} 배분 금액 슬라이더"
+                    class="money-slider w-full cursor-pointer block"
+                    style="--slider-accent: ${c.colorHex};"
+                  />
+                </div>
+
+                <!-- -5 / Direct Number Input / +5 / One-Click Needed Button -->
+                <div class="no-print flex items-center gap-1">
+                  <button
+                    type="button"
+                    data-action="minus"
+                    data-id="${c.id}"
+                    class="alloc-step-btn px-2 py-1 rounded-lg bg-white hover:bg-slate-100 border border-slate-200 text-[11px] font-extrabold text-slate-700 active:scale-95 transition cursor-pointer shrink-0"
+                    aria-label="${c.name} 5만 원 빼기"
+                  >-5</button>
+
+                  <div class="relative flex-1 min-w-0">
+                    <input
+                      type="number"
+                      id="num-${c.id}"
+                      data-id="${c.id}"
+                      min="0"
+                      max="100"
+                      step="1"
+                      value="${amt}"
+                      aria-label="${c.name} 배분 금액 숫자 입력"
+                      class="alloc-num-input w-full text-center font-extrabold text-xs sm:text-sm py-1 pr-5 pl-1 rounded-lg bg-white border border-slate-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none text-slate-900"
+                    />
+                    <span class="absolute right-1.5 top-1/2 -translate-y-1/2 text-[10px] font-bold text-slate-400 pointer-events-none">만</span>
+                  </div>
+
+                  <button
+                    type="button"
+                    data-action="plus"
+                    data-id="${c.id}"
+                    class="alloc-step-btn px-2 py-1 rounded-lg bg-white hover:bg-slate-100 border border-slate-200 text-[11px] font-extrabold text-slate-700 active:scale-95 transition cursor-pointer shrink-0"
+                    aria-label="${c.name} 5만 원 더하기"
+                  >+5</button>
+
+                  <button
+                    type="button"
+                    data-action="needed"
+                    data-id="${c.id}"
+                    class="alloc-step-btn px-2 py-1 rounded-lg text-[10px] xl:text-[11px] font-extrabold text-white active:scale-95 transition cursor-pointer shrink-0 shadow-xs"
+                    style="background-color: ${c.colorHex};"
+                    title="${c.name}님의 필요 금액(${c.needed}만 원) 바로 채우기"
+                  >필요액</button>
+                </div>
+              </div>
+
+              <!-- 4. Reason Textarea (Flexes smoothly into remaining vertical space) -->
+              <div class="flex-1 flex flex-col min-h-0">
+                <label for="reason-${c.id}" class="text-[11px] font-extrabold text-slate-700 mb-1 shrink-0">
+                  ✏️ 왜 이 금액을 배분했나요?
+                </label>
+                <textarea
+                  id="reason-${c.id}"
+                  data-id="${c.id}"
+                  placeholder="이웃의 사연과 고민할 점을 생각해 보고, 이 금액을 정한 이유를 적어 보세요."
+                  class="reason-textarea reason-text flex-1 min-h-0 w-full p-2 rounded-xl border border-slate-200 bg-slate-50/70 focus:bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none text-slate-800 resize-none transition"
+                >${escapeHtml(reason)}</textarea>
+                <!-- Print-Only Full Text Mirror -->
+                <div id="print-reason-${c.id}" class="print-only print-mirror"></div>
+              </div>
+            </article>
+          `;
+        }).join('');
+
+        // Wire Step Buttons (-5, +5, 필요액)
+        grid.querySelectorAll('.alloc-step-btn').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            const id = btn.getAttribute('data-id');
+            const action = btn.getAttribute('data-action');
+            const charObj = CHARACTERS.find((c) => c.id === id);
+            if (!charObj) return;
+            if (action === 'plus') {
+              setCharacterAmount(id, (state.allocations[id] || 0) + 5);
+            } else if (action === 'minus') {
+              setCharacterAmount(id, (state.allocations[id] || 0) - 5);
+            } else if (action === 'needed') {
+              setCharacterAmount(id, charObj.needed);
+            }
+          });
+        });
+
+        // Wire Numeric Inputs
+        grid.querySelectorAll('.alloc-num-input').forEach((input) => {
+          input.addEventListener('input', (e) => {
+            const id = input.getAttribute('data-id');
+            if (e.target.value === '') {
+              setCharacterAmount(id, 0, true);
+              return;
+            }
+            const parsed = parseInt(e.target.value, 10);
+            if (!Number.isNaN(parsed)) {
+              setCharacterAmount(id, parsed, true);
+            }
+          });
+          input.addEventListener('blur', () => {
+            const id = input.getAttribute('data-id');
+            input.value = state.allocations[id];
+          });
+        });
+
+        // Wire Sliders
+        grid.querySelectorAll('.money-slider').forEach((slider) => {
+          slider.addEventListener('input', (e) => {
+            const id = slider.getAttribute('data-id');
+            setCharacterAmount(id, parseInt(e.target.value, 10));
+          });
+        });
+
+        // Wire Reason Textareas
+        grid.querySelectorAll('.reason-textarea').forEach((textarea) => {
+          textarea.addEventListener('input', (e) => {
+            const id = textarea.getAttribute('data-id');
+            state.reasons[id] = e.target.value;
+            updatePrintMirrors();
+            saveState();
+          });
+        });
+      }
+
+      // =========================================================
+      // Update Amount & Sync Live Budget UI + Fulfillment Badges
+      // =========================================================
+      function setCharacterAmount(id, rawValue, skipNumInput = false) {
+        const clamped = Math.max(0, Math.min(100, Math.round(Number(rawValue) || 0)));
+        state.allocations[id] = clamped;
+
+        const numEl = document.getElementById(`num-${id}`);
+        const sliderEl = document.getElementById(`slider-${id}`);
+        if (numEl && !skipNumInput) numEl.value = clamped;
+        if (sliderEl) sliderEl.value = clamped;
+
+        updateBudgetUI();
+        saveState();
+      }
+
+      function updateBudgetUI() {
+        const total = getTotalAllocated();
+        const diff = TOTAL_BUDGET - total;
+
+        const allocatedEl = document.getElementById('trackerAllocated');
+        const remainLabelEl = document.getElementById('trackerRemainLabel');
+        const remainEl = document.getElementById('trackerRemain');
+        const statusBadge = document.getElementById('trackerStatusBadge');
+        const trackEl = document.getElementById('stackedBarTrack');
+
+        allocatedEl.textContent = `${total}만 원`;
+        trackEl.setAttribute('aria-valuenow', String(Math.min(100, total)));
+
+        if (total === TOTAL_BUDGET) {
+          allocatedEl.className = 'font-extrabold text-emerald-600 text-sm sm:text-base';
+          remainLabelEl.textContent = '남은 돈:';
+          remainEl.textContent = '0만 원';
+          remainEl.className = 'font-extrabold text-emerald-600 text-sm sm:text-base';
+          statusBadge.textContent = '100만 원 배분 완료! ✓';
+          statusBadge.className = 'inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-200 whitespace-nowrap';
+          trackEl.classList.remove('ring-2', 'ring-rose-400');
+        } else if (total > TOTAL_BUDGET) {
+          allocatedEl.className = 'font-extrabold text-rose-600 text-sm sm:text-base';
+          remainLabelEl.textContent = '초과:';
+          remainEl.textContent = `${total - TOTAL_BUDGET}만 원 초과!`;
+          remainEl.className = 'font-extrabold text-rose-600 text-sm sm:text-base';
+          statusBadge.textContent = '100만 원 초과!';
+          statusBadge.className = 'inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-extrabold bg-rose-100 text-rose-700 border border-rose-300 animate-pulse whitespace-nowrap';
+          trackEl.classList.add('ring-2', 'ring-rose-400');
+        } else {
+          allocatedEl.className = 'font-extrabold text-blue-600 text-sm sm:text-base';
+          remainLabelEl.textContent = '남은 돈:';
+          remainEl.textContent = `${diff}만 원`;
+          remainEl.className = 'font-extrabold text-amber-600 text-sm sm:text-base';
+          statusBadge.textContent = '배분 중';
+          statusBadge.className = 'inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-extrabold bg-amber-100 text-amber-800 border border-amber-200 whitespace-nowrap';
+          trackEl.classList.remove('ring-2', 'ring-rose-400');
+        }
+
+        // Sync 4-Color Stacked Bar, Legends, Slider Track Fills & Fulfillment Pills
+        const barBase = Math.max(TOTAL_BUDGET, total);
+        CHARACTERS.forEach((c) => {
+          const amt = Number(state.allocations[c.id]) || 0;
+          const widthPct = barBase > 0 ? (amt / barBase) * 100 : 0;
+
+          const barSeg = document.getElementById(`bar-${c.id}`);
+          if (barSeg) {
+            barSeg.style.width = `${widthPct}%`;
+            barSeg.textContent = widthPct >= 10 ? `${amt}만` : '';
+          }
+
+          const legEl = document.getElementById(`leg-${c.id}`);
+          if (legEl) legEl.textContent = `${amt}만`;
+
+          const dispEl = document.getElementById(`disp-${c.id}`);
+          if (dispEl) dispEl.textContent = `${amt}만 원`;
+
+          const sliderEl = document.getElementById(`slider-${c.id}`);
+          if (sliderEl) {
+            sliderEl.style.background = `linear-gradient(to right, ${c.colorHex} 0%, ${c.colorHex} ${amt}%, #E2E8F0 ${amt}%, #E2E8F0 100%)`;
+          }
+
+          const fulfillEl = document.getElementById(`fulfill-${c.id}`);
+          if (fulfillEl) {
+            const pctOfNeed = Math.round((amt / c.needed) * 100);
+            if (amt >= c.needed) {
+              fulfillEl.textContent = amt > c.needed ? `✓ 필요액 달성 (+${amt - c.needed}만)` : '✓ 필요액 달성!';
+              fulfillEl.className = 'px-2 py-0.5 rounded-full text-[10px] xl:text-[11px] font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-300 whitespace-nowrap';
+            } else {
+              fulfillEl.textContent = `필요액의 ${pctOfNeed}%`;
+              fulfillEl.className = 'px-2 py-0.5 rounded-full text-[10px] xl:text-[11px] font-extrabold bg-white/90 text-slate-600 border border-slate-200/90 whitespace-nowrap';
+            }
+          }
+        });
+      }
+
+      // =========================================================
+      // Render Tier 3: Fairness Criteria Multi-Select Chips
+      // =========================================================
+      function renderCriteriaChips() {
+        const container = document.getElementById('criteriaChips');
+        container.innerHTML = CRITERIA_OPTIONS.map((label) => {
+          const active = state.selectedCriteria.includes(label);
+          const classes = active
+            ? 'bg-indigo-600 text-white border-indigo-600 shadow-xs'
+            : 'bg-slate-50 text-slate-700 border-slate-200 hover:border-indigo-300 hover:bg-indigo-50/50';
+          return `
+            <button
+              type="button"
+              data-criteria="${escapeHtml(label)}"
+              aria-pressed="${active}"
+              class="criteria-chip px-2 py-1 rounded-full text-[11px] font-bold border transition active:scale-95 cursor-pointer whitespace-nowrap ${classes}"
+            >
+              ${active ? '✓ ' : ''}${escapeHtml(label)}
+            </button>
+          `;
+        }).join('');
+
+        container.querySelectorAll('.criteria-chip').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            const val = btn.getAttribute('data-criteria');
+            const idx = state.selectedCriteria.indexOf(val);
+            if (idx > -1) state.selectedCriteria.splice(idx, 1);
+            else state.selectedCriteria.push(val);
+            renderCriteriaChips();
+            updatePrintMirrors();
+            saveState();
+          });
+        });
+      }
+
+      // =========================================================
+      // Render Discussion Modal Questions (3 Expandable Cards)
+      // =========================================================
+      function renderDiscussionQuestions() {
+        const list = document.getElementById('discussionList');
+        list.innerHTML = DISCUSSION_QUESTIONS.map((q, index) => `
+          <div class="dq-card rounded-2xl border border-slate-200 bg-slate-50/70 hover:bg-amber-50/50 hover:border-amber-200 p-4 transition cursor-pointer" data-dq-idx="${index}" tabindex="0" role="button" aria-expanded="${index === 0 ? 'true' : 'false'}">
+            <div class="flex items-center justify-between gap-2 mb-1.5">
+              <span class="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-white border border-amber-200 text-amber-800">
+                ${q.num} · ${q.tag}
+              </span>
+              <span class="dq-toggle text-xs font-bold text-slate-400">${index === 0 ? '접기 ▴' : '펼치기 ▾'}</span>
+            </div>
+            <h3 class="text-sm sm:text-base font-extrabold text-slate-900 leading-snug">
+              ${q.title}
+            </h3>
+            <div class="dq-hint ${index === 0 ? '' : 'hidden'} mt-3 pt-3 border-t border-amber-200/70 text-xs sm:text-sm text-slate-700 leading-relaxed bg-white/90 rounded-xl p-3">
+              <span class="font-extrabold text-amber-700 block mb-1">💡 교사용 토의 이끌기 포인트</span>
+              ${q.hint}
+            </div>
+          </div>
+        `).join('');
+
+        list.querySelectorAll('.dq-card').forEach((card) => {
+          const toggle = () => {
+            const hint = card.querySelector('.dq-hint');
+            const icon = card.querySelector('.dq-toggle');
+            const isHidden = hint.classList.toggle('hidden');
+            card.setAttribute('aria-expanded', String(!isHidden));
+            icon.textContent = isHidden ? '펼치기 ▾' : '접기 ▴';
+          };
+          card.addEventListener('click', toggle);
+          card.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              toggle();
+            }
+          });
+        });
+      }
+
+      // =========================================================
+      // Sync Print Mirrors for Clean A4 Landscape 1-Page Worksheet
+      // =========================================================
+      function updatePrintMirrors() {
+        const headerGroup = document.getElementById('printHeaderGroup');
+        if (headerGroup) headerGroup.textContent = state.groupName.trim() || '(미입력)';
+
+        const printCriteria = document.getElementById('printCriteriaSummary');
+        if (printCriteria) {
+          printCriteria.textContent = state.selectedCriteria.length > 0
+            ? state.selectedCriteria.join(' / ')
+            : '(선택한 공정 기준 없음)';
+        }
+
+        const printPrinciple = document.getElementById('printOverallPrinciple');
+        if (printPrinciple) {
+          printPrinciple.textContent = state.overallPrinciple.trim() || '(미작성)';
+        }
+
+        CHARACTERS.forEach((c) => {
+          const mirror = document.getElementById(`print-reason-${c.id}`);
+          if (mirror) {
+            mirror.textContent = (state.reasons[c.id] || '').trim() || '(배분 이유 미작성)';
+          }
+        });
+      }
+
+      // =========================================================
+      // Open & Populate Classroom Presentation Modal ("📊 발표")
+      // =========================================================
+      function openPresentationModal() {
+        const total = getTotalAllocated();
+        const warnBanner = document.getElementById('presWarningBanner');
+        const warnText = document.getElementById('presWarningText');
+
+        if (total !== TOTAL_BUDGET) {
+          warnBanner.classList.remove('hidden');
+          warnText.textContent = total < TOTAL_BUDGET
+            ? `현재 총 ${total}만 원이 배분되었습니다. 아직 ${TOTAL_BUDGET - total}만 원이 남아 있어요!`
+            : `현재 총 ${total}만 원으로 100만 원을 ${total - TOTAL_BUDGET}만 원 초과했어요!`;
+          showToast(`안내: 현재 합계가 ${total}만 원입니다 (100만 원에 맞추어 주세요)`, 'warning');
+        } else {
+          warnBanner.classList.add('hidden');
+        }
+
+        const groupBadge = document.getElementById('presGroupBadge');
+        groupBadge.textContent = state.groupName.trim() ? `— ${state.groupName.trim()}` : '';
+
+        // Build SVG Donut Chart Segments
+        const radius = 66;
+        const circumference = 2 * Math.PI * radius;
+        const base = Math.max(TOTAL_BUDGET, total);
+        let offset = 0;
+
+        document.getElementById('presDonutSegments').innerHTML = CHARACTERS.map((c) => {
+          const amt = Number(state.allocations[c.id]) || 0;
+          if (amt <= 0) return '';
+          const segLen = (amt / base) * circumference;
+          const dashArray = `${segLen} ${circumference - segLen}`;
+          const dashOffset = -offset;
+          offset += segLen;
+          return `<circle cx="90" cy="90" r="${radius}" fill="none" stroke="${c.colorHex}" stroke-width="26" stroke-dasharray="${dashArray}" stroke-dashoffset="${dashOffset}" />`;
+        }).join('');
+
+        document.getElementById('presDonutTotal').textContent = `${total}만`;
+
+        // Legend Rows
+        document.getElementById('presLegend').innerHTML = CHARACTERS.map((c) => {
+          const amt = Number(state.allocations[c.id]) || 0;
+          const pct = total > 0 ? Math.round((amt / total) * 100) : 0;
+          return `
+            <div class="flex items-center justify-between gap-2">
+              <div class="flex items-center gap-2 min-w-0">
+                <span class="w-3 h-3 rounded-full shrink-0" style="background-color:${c.colorHex};"></span>
+                <span class="font-extrabold text-slate-800 whitespace-nowrap">${c.num} ${c.name}</span>
+                <span class="text-[11px] text-slate-400 truncate">(${c.themeBadge})</span>
+              </div>
+              <span class="font-extrabold text-slate-900 whitespace-nowrap">${amt}만 원 <span class="text-xs font-semibold text-slate-400">(${total === 100 ? amt : pct}%)</span></span>
+            </div>
+          `;
+        }).join('');
+
+        // Selected Criteria Badges
+        const tagsEl = document.getElementById('presCriteriaTags');
+        tagsEl.innerHTML = state.selectedCriteria.length > 0
+          ? state.selectedCriteria.map((t) => `<span class="px-2.5 py-1 rounded-full text-xs font-extrabold bg-indigo-100 text-indigo-800 border border-indigo-200">${escapeHtml(t)}</span>`).join('')
+          : `<span class="text-xs text-slate-400">선택된 공정함 기준이 없습니다.</span>`;
+
+        // Overall Allocation Principle
+        document.getElementById('presOverallPrinciple').textContent = state.overallPrinciple.trim()
+          || '아직 전체 배분 원칙이 작성되지 않았습니다.';
+
+        // Right 2x2 Character Result Cards
+        document.getElementById('presCardsGrid').innerHTML = CHARACTERS.map((c) => {
+          const amt = Number(state.allocations[c.id]) || 0;
+          const pctNeed = Math.min(100, Math.round((amt / c.needed) * 100));
+          const achieved = amt >= c.needed;
+          const reason = (state.reasons[c.id] || '').trim();
+          return `
+            <div class="bg-white rounded-2xl p-4 border shadow-xs flex flex-col gap-3" style="border-color:${c.borderHex};">
+              <div class="flex items-center justify-between gap-2">
+                <div class="flex items-center gap-2.5 min-w-0">
+                  <div class="w-12 h-12 rounded-xl overflow-hidden p-0.5 shrink-0" style="background-color:${c.softBg};">
+                    ${c.svg}
+                  </div>
+                  <div class="min-w-0">
+                    <h3 class="text-base sm:text-lg font-extrabold text-slate-900 truncate">${c.num} ${c.name}</h3>
+                    <span class="text-[11px] font-bold text-slate-500 block truncate">${c.ageRole}</span>
+                  </div>
+                </div>
+                <div class="text-right shrink-0">
+                  <div class="text-xl sm:text-2xl font-extrabold ${c.textAccent}">${amt}만 원</div>
+                  <div class="text-[11px] font-bold ${achieved ? 'text-emerald-600' : 'text-slate-400'}">
+                    ${achieved ? '✓ 필요액 달성!' : `필요 ${c.needed}만 중 ${Math.round((amt / c.needed) * 100)}%`}
+                  </div>
+                </div>
+              </div>
+
+              <!-- Needed vs Allocated Bar -->
+              <div class="w-full h-2 rounded-full bg-slate-100 overflow-hidden">
+                <div class="h-full rounded-full transition-all" style="width:${pctNeed}%; background-color:${achieved ? '#10B981' : c.colorHex};"></div>
+              </div>
+
+              <!-- Written Reason Display -->
+              <div class="flex-1 rounded-xl bg-slate-50 border border-slate-100 p-3 text-sm sm:text-[15px] text-slate-800 leading-relaxed whitespace-pre-wrap">
+                ${reason ? escapeHtml(reason) : '<span class="text-slate-400 text-xs italic">배분 이유가 작성되지 않았습니다.</span>'}
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        openModal('presentationModal');
+      }
+
+      // =========================================================
+      // Modal Open / Close Helpers
+      // =========================================================
+      function openModal(id) {
+        const el = document.getElementById(id);
+        if (el) el.classList.remove('hidden');
+      }
+
+      function closeModal(id) {
+        const el = document.getElementById(id);
+        if (el) el.classList.add('hidden');
+      }
+
+      function closeAllModals() {
+        ['scenarioModal', 'discussionModal', 'presentationModal', 'resetConfirmModal'].forEach(closeModal);
+      }
+
+      // =========================================================
+      // Action Handlers: Equal Split (25만씩) & Full Reset
+      // =========================================================
+      function handleEqualSplit() {
+        CHARACTERS.forEach((c) => {
+          state.allocations[c.id] = 25;
+          const numEl = document.getElementById(`num-${c.id}`);
+          const sliderEl = document.getElementById(`slider-${c.id}`);
+          if (numEl) numEl.value = 25;
+          if (sliderEl) sliderEl.value = 25;
+        });
+        updateBudgetUI();
+        saveState();
+        showToast('네 분에게 25만 원씩 똑같이 나누어 보았습니다! 네 분 모두 필요액이 채워졌는지 확인해 보세요.', 'info');
+      }
+
+      function performReset() {
+        state = createDefaultState();
+        try { localStorage.removeItem(STORAGE_KEY); } catch (err) {}
+
+        document.getElementById('groupNameInput').value = '';
+        document.getElementById('overallPrincipleInput').value = '';
+
+        renderCriteriaChips();
+        renderCharacterCards();
+        updateBudgetUI();
+        updatePrintMirrors();
+        closeModal('resetConfirmModal');
+        showToast('모든 배분 금액과 작성 내용이 초기화되었습니다.', 'info');
+      }
+
+      // =========================================================
+      // Initialization & Event Listeners
+      // =========================================================
+      function init() {
+        loadState();
+
+        const groupInput = document.getElementById('groupNameInput');
+        const principleInput = document.getElementById('overallPrincipleInput');
+
+        groupInput.value = state.groupName;
+        principleInput.value = state.overallPrinciple;
+
+        groupInput.addEventListener('input', (e) => {
+          state.groupName = e.target.value;
+          updatePrintMirrors();
+          saveState();
+        });
+
+        principleInput.addEventListener('input', (e) => {
+          state.overallPrinciple = e.target.value;
+          updatePrintMirrors();
+          saveState();
+        });
+
+        // Initial Render
+        renderCharacterCards();
+        renderCriteriaChips();
+        renderDiscussionQuestions();
+        updateBudgetUI();
+        updatePrintMirrors();
+
+        // Top Bar Buttons
+        document.getElementById('btnEqualSplit').addEventListener('click', handleEqualSplit);
+        document.getElementById('btnReset').addEventListener('click', () => openModal('resetConfirmModal'));
+        document.getElementById('btnScenario').addEventListener('click', () => openModal('scenarioModal'));
+        document.getElementById('btnDiscussion').addEventListener('click', () => openModal('discussionModal'));
+        document.getElementById('btnPresentation').addEventListener('click', openPresentationModal);
+        document.getElementById('btnPrint').addEventListener('click', () => {
+          updatePrintMirrors();
+          window.print();
+        });
+
+        // Modal Internal Buttons
+        document.getElementById('confirmResetBtn').addEventListener('click', performReset);
+        document.getElementById('modalPrintBtn').addEventListener('click', () => {
+          closeModal('presentationModal');
+          setTimeout(() => {
+            updatePrintMirrors();
+            window.print();
+          }, 120);
+        });
+
+        // Close Modal Buttons & Backdrop Clicks
+        document.querySelectorAll('[data-close-modal]').forEach((btn) => {
+          btn.addEventListener('click', () => closeModal(btn.getAttribute('data-close-modal')));
+        });
+
+        ['scenarioModal', 'discussionModal', 'presentationModal', 'resetConfirmModal'].forEach((modalId) => {
+          const modalEl = document.getElementById(modalId);
+          modalEl.addEventListener('click', (e) => {
+            if (e.target === modalEl) closeModal(modalId);
+          });
+        });
+
+        // Close Active Modal on ESC Key
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') closeAllModals();
+        });
+      }
+
+      document.addEventListener('DOMContentLoaded', init);
+    })();
+  </script>
+</body>
+</html>
